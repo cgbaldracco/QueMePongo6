@@ -3,8 +3,7 @@ package ar.edu.utn.frba.dds.queMePongo.servicioMeteorologico;
 import java.util.*;
 
 public final class AccuWeatherAPI {
-
-    public final List<Map<String, Object>> getWeather(String ciudad) {
+	public final List<Map<String, Object>> getWeather(String ciudad) {
 		return Arrays.asList(new HashMap<String, Object>(){{
 			put("DateTime", "2019-05-03T01:00:00-03:00");
 			put("EpochDateTime", 1556856000);
@@ -20,5 +19,9 @@ public final class AccuWeatherAPI {
 				put("UnitType", 18);
 			}});
 		}});
+	}
+
+	public Map<String, List<String>> getAlerts(String ciudad) {
+		return new HashMap<>();
 	}
 }

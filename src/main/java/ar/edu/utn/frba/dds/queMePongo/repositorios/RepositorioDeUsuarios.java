@@ -16,6 +16,10 @@ public class RepositorioDeUsuarios {
 
   private RepositorioDeUsuarios() {}
 
+  public void calcularSugerenciasDiarias() {
+    repositorioDeUsuarios.forEach(Usuario::calcularSugerenciaDiaria);
+  }
+
   public List<Usuario> obtenerUsuarios() {
     return repositorioDeUsuarios;
   }

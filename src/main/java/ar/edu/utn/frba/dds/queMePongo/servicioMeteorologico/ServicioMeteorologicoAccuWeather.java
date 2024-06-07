@@ -1,16 +1,20 @@
 package ar.edu.utn.frba.dds.queMePongo.servicioMeteorologico;
 
 import ar.edu.utn.frba.dds.queMePongo.exceptions.FalloConeccionConApiException;
+import ar.edu.utn.frba.dds.queMePongo.repositorios.RepositorioDeUsuarios;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ServicioMeteorologicoAccuWeather implements ServicioMeteorologico {
   private final AccuWeatherAPI api;
   private final Duration periodoDeValidez;
   private Map<String, RespuestaMeteorologica> ultimasRespuestas;
+  private List<AlertaMeteorologica> ultimasAlertas = new ArrayList<>();
 
   public ServicioMeteorologicoAccuWeather(AccuWeatherAPI api, Duration periodoDeValidez) {
     this.api = api;
@@ -23,6 +27,16 @@ public class ServicioMeteorologicoAccuWeather implements ServicioMeteorologico {
       ultimasRespuestas.put(direccion, this.obtenerRespuestaMeteorologica(direccion));
     }
     return this.ultimasRespuestas.get(direccion).estadoDelTiempo();
+  }
+
+  public void actualizarAlertas() {
+    Map<String, List<String>> alertas = api.getAlerts("Buenos Aires");
+    ultimasAlertas = adaptarAlertas(alertas.get("CurrentAlerts"));
+    RepositorioDeUsuarios.instance().obtenerUsuarios().forEach(u -> u.realizarAccionesSobreAlertas(ultimasAlertas));
+  }
+
+  public List<AlertaMeteorologica> adaptarAlertas(List<String> alertas) {
+    return alertas.stream().map(a -> AlertaMeteorologica.valueOf(a.toUpperCase())).toList();
   }
 
   private LocalDateTime proximaExpiracion() {

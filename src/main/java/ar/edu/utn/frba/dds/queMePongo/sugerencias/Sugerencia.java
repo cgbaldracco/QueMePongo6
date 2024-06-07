@@ -18,9 +18,4 @@ public class Sugerencia {
     return prendaSuperior.aptaParaTemperatura(temperatura) && prendaInferior.aptaParaTemperatura(temperatura) &&
         prendaCalzado.aptaParaTemperatura(temperatura);
   }
-
-  public Boolean aptaParaHumedad(Humedad humedad) {
-    return prendaSuperior.aptaParaHumedad(humedad) && prendaInferior.aptaParaHumedad(humedad) &&
-        prendaCalzado.aptaParaHumedad(humedad);
-  }
 }
